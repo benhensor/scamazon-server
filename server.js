@@ -36,7 +36,7 @@ sequelize
 
 app.get('/api/test', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_URL || 'https://scamazon-frontend.vercel.app'); // This explicitly sets the header for this route
-  res.json({ message: 'Hello from Server!' })
+  res.json({ message: 'Hello World!!!' })
 })
 
 const PORT = process.env.PORT || 5000
