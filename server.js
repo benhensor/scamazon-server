@@ -11,19 +11,11 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    const allowedOrigins = [process.env.FRONTEND_URL || 'https://scamazon-frontend.vercel.app'];
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
+  origin: process.env.FRONTEND_URL || 'https://scamazon-frontend.vercel.app',
+  credentials: true, // Allow cookies and credentials
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['set-cookie'], // Add this if you need to expose certain headers (like cookies)
-}
+};
 
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
@@ -43,6 +35,7 @@ sequelize
   });
 
 app.get('/api/test', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_URL || 'https://scamazon-frontend.vercel.app'); // This explicitly sets the header for this route
   res.json({ message: 'Hello from Server!' })
 })
 
