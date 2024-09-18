@@ -1,13 +1,13 @@
 import sequelize from '../config/database.js'
-import User from './User'
-import Product from './Product'
-import Category from './Category'
-import Order from './Order'
-import OrderItem from './OrderItem'
-import Cart from './Cart'
-import CartItem from './CartItem'
-import Payment from './Payment'
-import Review from './Review'
+import User from './User.js'
+import Product from './Product.js'
+import Category from './Category.js'
+import Order from './Order.js'
+import OrderItem from './OrderItem.js'
+import Cart from './Cart.js'
+import CartItem from './CartItem.js'
+import Payment from './Payment.js'
+import Review from './Review.js'
 
 // Define Relationships
 
