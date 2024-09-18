@@ -17,10 +17,6 @@ const OrderItem = sequelize.define('OrderItem', {
   },
   product_id: {
     type: DataTypes.BIGINT,
-    references: {
-      model: 'products',
-      key: 'product_id'
-    },
     allowNull: false,
   },
   quantity: {

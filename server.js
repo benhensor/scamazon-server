@@ -5,11 +5,22 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import db from './models/index.js'; 
+import db from './models/index.js';
+
+import productsRoutes from './routes/productsRoutes.js';
+// import userRoutes from './routes/userRoutes.js';
+// import orderRoutes from './routes/orderRoutes.js';
+// import orderItemRoutes from './routes/orderItemRoutes.js';
+// import cartRoutes from './routes/cartRoutes.js';
+// import cartItemRoutes from './routes/cartItemRoutes.js';
+// import paymentRoutes from './routes/paymentRoutes.js';
+// import reviewRoutes from './routes/reviewRoutes.js';
+
 
 dotenv.config();
 
 const app = express();
+
 
 // CORS Configuration
 const corsOptions = {
@@ -19,6 +30,7 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
+
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
@@ -26,6 +38,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 app.use(morgan('combined'));
 app.use(helmet());
+
 
 // Test database connection
 db.sequelize
@@ -37,7 +50,6 @@ db.sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-// No need to call sequelize.sync() here, it's handled in models/index.js
 
 // Simple test route
 app.get('/api/test', (req, res) => {
@@ -45,10 +57,23 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'Hello World!!!' });
 });
 
+
+// Routes
+app.use('/api/products', productsRoutes);
+// app.use('/api/users', userRoutes);
+// app.use('/api/orders', orderRoutes);
+// app.use('/api/order-items', orderItemRoutes);
+// app.use('/api/cart', cartRoutes);
+// app.use('/api/cart-items', cartItemRoutes);
+// app.use('/api/payments', paymentRoutes);
+// app.use('/api/reviews', reviewRoutes);
+
+
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 
 export default app;
