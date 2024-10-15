@@ -1,22 +1,22 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
-const CartItem = sequelize.define('CartItem', {
-  cart_item_id: {
+const BasketItem = sequelize.define('BasketItem', {
+  basket_item_id: {
     type: DataTypes.BIGINT,
     autoIncrement: true,
     primaryKey: true,
   },
-  cart_id: {
+  basket_id: {
     type: DataTypes.BIGINT,
     references: {
-      model: 'carts',
-      key: 'cart_id'
+      model: 'baskets',
+      key: 'basket_id'
     },
     allowNull: false,
   },
-  product_id: {
-    type: DataTypes.BIGINT,
+  product: {
+    type: DataTypes.JSONB,
     allowNull: false,
   },
   quantity: {
@@ -25,8 +25,8 @@ const CartItem = sequelize.define('CartItem', {
     defaultValue: 1,
   },
 }, {
-  tableName: 'cart_items',
+  tableName: 'basket_items',
   timestamps: true,
 });
 
-export default CartItem;
+export default BasketItem;

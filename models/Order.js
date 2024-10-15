@@ -28,6 +28,10 @@ const Order = sequelize.define('Order', {
     type: DataTypes.TEXT, // You can store the address as a JSON or TEXT field
     allowNull: false,
   },
+  billing_address: {
+    type: DataTypes.TEXT, // You can store the address as a JSON or TEXT field
+    allowNull: false,
+  },
 }, {
   tableName: 'orders',
   timestamps: true,

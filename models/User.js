@@ -34,25 +34,6 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING(255),
     allowNull: false
   },
-  address_line1: {
-    type: DataTypes.STRING(255),
-  },
-  address_line2: {
-    type: DataTypes.STRING(255),
-  },
-  city: {
-    type: DataTypes.STRING(50),
-  },
-  county: {
-    type: DataTypes.STRING(50),
-  },
-  postcode: {
-    type: DataTypes.STRING(10),
-    validate: {
-      is: /^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$/,
-      len: [6, 8],
-    }
-  },
 }, {
   tableName: 'users',
   timestamps: true,

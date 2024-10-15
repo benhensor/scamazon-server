@@ -1,37 +1,37 @@
 import sequelize from '../config/database.js'
 import User from './User.js'
+import Address from './Address.js'
 import Order from './Order.js'
 import OrderItem from './OrderItem.js'
-import Cart from './Cart.js'
-import CartItem from './CartItem.js'
+import Basket from './Basket.js'
+import BasketItem from './BasketItem.js'
 import Payment from './Payment.js'
-import Review from './Review.js'
 
 // Define Relationships
 
-// 1. Users and Orders
+// Users and Addresses
+User.hasMany(Address, { foreignKey: 'user_id', onDelete: 'CASCADE' })
+Address.belongsTo(User, { foreignKey: 'user_id' })
+
+// Users and Orders
 User.hasMany(Order, { foreignKey: 'user_id', onDelete: 'CASCADE' })
 Order.belongsTo(User, { foreignKey: 'user_id' })
 
-// 2. Users and Reviews
-User.hasMany(Review, { foreignKey: 'user_id', onDelete: 'CASCADE' })
-Review.belongsTo(User, { foreignKey: 'user_id' })
+// Users and Cart
+User.hasOne(Basket, { foreignKey: 'user_id', onDelete: 'CASCADE' })
+Basket.belongsTo(User, { foreignKey: 'user_id' })
 
-// 3. Users and Cart
-User.hasOne(Cart, { foreignKey: 'user_id', onDelete: 'CASCADE' })
-Cart.belongsTo(User, { foreignKey: 'user_id' })
-
-// 4. Orders and Order Items
+// Orders and Order Items
 Order.hasMany(OrderItem, { foreignKey: 'order_id', onDelete: 'CASCADE' })
 OrderItem.belongsTo(Order, { foreignKey: 'order_id' })
 
-// 5. Orders and Payment
+// Orders and Payment
 Order.hasOne(Payment, { foreignKey: 'order_id', onDelete: 'CASCADE' })
 Payment.belongsTo(Order, { foreignKey: 'order_id' })
 
-// 6. Carts and Cart Items
-Cart.hasMany(CartItem, { foreignKey: 'cart_id', onDelete: 'CASCADE' })
-CartItem.belongsTo(Cart, { foreignKey: 'cart_id' })
+// Carts and Cart Items
+Basket.hasMany(BasketItem, { foreignKey: 'basket_id', onDelete: 'CASCADE' })
+BasketItem.belongsTo(Basket, { foreignKey: 'basket_id' })
 
 // Synchronize models with the database in bulk
 const syncModels = async () => {
@@ -48,12 +48,12 @@ syncModels()
 const db = {
 	sequelize,
 	User,
+	Address,
 	Order,
 	OrderItem,
-	Cart,
-	CartItem,
+	Basket,
+	BasketItem,
 	Payment,
-	Review,
 }
 
 export default db

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -6,13 +7,14 @@ import compression from 'compression';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import db from './models/index.js';
+import sequelize from './config/database.js';
 
+import userRoutes from './routes/userRoutes.js';
 import productsRoutes from './routes/productsRoutes.js';
-// import userRoutes from './routes/userRoutes.js';
 // import orderRoutes from './routes/orderRoutes.js';
 // import orderItemRoutes from './routes/orderItemRoutes.js';
-// import cartRoutes from './routes/cartRoutes.js';
-// import cartItemRoutes from './routes/cartItemRoutes.js';
+import basketRoutes from './routes/basketRoutes.js';
+import basketItemRoutes from './routes/basketItemRoutes.js';
 // import paymentRoutes from './routes/paymentRoutes.js';
 // import reviewRoutes from './routes/reviewRoutes.js';
 
@@ -37,7 +39,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 app.use(morgan('combined'));
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false, // Disable if your CSP configuration is custom
+}));
+
+// Sync database
+sequelize.sync({ alter: true })
+  .then(() => console.log('Database synced'))
+  .catch(err => console.error('Failed to sync database:', err));
 
 
 // Test database connection
@@ -59,12 +68,12 @@ app.get('/api/test', (req, res) => {
 
 
 // Routes
+app.use('/api/user', userRoutes);
 app.use('/api/products', productsRoutes);
-// app.use('/api/users', userRoutes);
 // app.use('/api/orders', orderRoutes);
 // app.use('/api/order-items', orderItemRoutes);
-// app.use('/api/cart', cartRoutes);
-// app.use('/api/cart-items', cartItemRoutes);
+app.use('/api/basket', basketRoutes);
+app.use('/api/basket-items', basketItemRoutes);
 // app.use('/api/payments', paymentRoutes);
 // app.use('/api/reviews', reviewRoutes);
 
