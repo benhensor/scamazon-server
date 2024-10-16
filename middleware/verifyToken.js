@@ -5,6 +5,7 @@ dotenv.config()
 
 const verifyToken = (req, res, next) => {
   const token = req.cookies.authToken;
+  console.log('Token:', token);
   if (!token) {
     console.log('Token missing');
     return res.status(401).json({ error: 'Unauthorized' });
