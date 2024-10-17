@@ -81,17 +81,18 @@ export const loginUser = async (req, res) => {
     if (!user) return res.status(404).json({ error: 'User not found' })
       const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' })
-
+    console.log('User logged in:', user)
       const token = jwt.sign(
-        { id: user.id, email: user.email },
+        { id: user.user_id, email: user.email },
         process.env.JWT_SECRET,
         { expiresIn: '24h' }
       )
 
+      res.clearCookie('authToken');
       res.cookie('authToken', token, {
         httpOnly: true,
-        sameSite: 'none',
-        secure: true,
+        sameSite: 'strict',
+        secure: false,
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
       })
       res.json({ user })
@@ -106,7 +107,7 @@ export const loginUser = async (req, res) => {
 
 export const logoutUser = async (req, res) => {
   res.clearCookie('authToken')
-  res.status(200).json({ message: 'User logged out' })
+  res.status(200).json({ message: 'Logged out successfully' })
 }
 
 export const getUser = async (req, res) => {

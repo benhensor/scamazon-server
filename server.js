@@ -10,6 +10,7 @@ import db from './models/index.js';
 import sequelize from './config/database.js';
 
 import userRoutes from './routes/userRoutes.js';
+import addressRoutes from './routes/addressRoutes.js';
 import productsRoutes from './routes/productsRoutes.js';
 // import orderRoutes from './routes/orderRoutes.js';
 // import orderItemRoutes from './routes/orderItemRoutes.js';
@@ -43,9 +44,16 @@ app.use(helmet({
 }));
 
 // Sync database
-sequelize.sync({ alter: true })
-  .then(() => console.log('Database synced'))
-  .catch(err => console.error('Failed to sync database:', err));
+if (process.env.NODE_ENV === 'development') {
+  sequelize.sync({ alter: true })
+    .then(() => console.log('Database synced (development)'))
+    .catch(err => console.error('Failed to sync database:', err));
+} else {
+  sequelize.sync() // Safe sync for production
+    .then(() => console.log('Database synced (production)'))
+    .catch(err => console.error('Failed to sync database:', err));
+}
+
 
 
 // Test database connection
@@ -68,6 +76,7 @@ app.get('/api/test', (req, res) => {
 
 // Routes
 app.use('/api/user', userRoutes);
+app.use('/api/addresses', addressRoutes);
 app.use('/api/products', productsRoutes);
 // app.use('/api/orders', orderRoutes);
 // app.use('/api/order-items', orderItemRoutes);

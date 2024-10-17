@@ -33,18 +33,6 @@ Payment.belongsTo(Order, { foreignKey: 'order_id' })
 Basket.hasMany(BasketItem, { foreignKey: 'basket_id', onDelete: 'CASCADE' })
 BasketItem.belongsTo(Basket, { foreignKey: 'basket_id' })
 
-// Synchronize models with the database in bulk
-const syncModels = async () => {
-	try {
-		await sequelize.sync({ force: true }) // Use { force: true } if you need to reset tables completely
-		console.log('All models were synchronized successfully.')
-	} catch (error) {
-		console.error('Error synchronizing models:', error)
-	}
-}
-
-syncModels()
-
 const db = {
 	sequelize,
 	User,
