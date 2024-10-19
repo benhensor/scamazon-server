@@ -5,7 +5,7 @@ dotenv.config()
 
 const verifyToken = (req, res, next) => {
   const token = req.cookies.authToken;
-  // console.log('Token received in middleware:', token);
+  console.log('Token received in middleware:', token);
 
   if (!token) {
     console.log('Token missing');
@@ -14,7 +14,7 @@ const verifyToken = (req, res, next) => {
 
   try {
     const verified = jwt.verify(token, process.env.JWT_SECRET);
-    // console.log('Token verified successfully:', verified);
+    console.log('Token verified successfully:', verified);
     req.user = verified;
     next();
   } catch (error) {
