@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
 const Order = sequelize.define('Order', {
-  order_id: {
+  id: {
     type: DataTypes.BIGINT,
     autoIncrement: true,
     primaryKey: true,
@@ -11,7 +11,7 @@ const Order = sequelize.define('Order', {
     type: DataTypes.BIGINT,
     references: {
       model: 'users', // 'users' refers to table name
-      key: 'user_id'
+      key: 'id'
     },
     allowNull: false
   },

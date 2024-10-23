@@ -78,34 +78,41 @@ export const loginUser = async (req, res) => {
 	try {
 		await loginSchema.validate({ email, password })
 		const user = await User.findOne({ where: { email } })
+
 		if (!user) return res.status(404).json({ error: 'User not found' })
 		const isMatch = await bcrypt.compare(password, user.password)
+
 		if (!isMatch)
 			return res.status(401).json({ error: 'Invalid credentials' })
+
 		console.log('User logged in:', user)
+
 		const token = jwt.sign(
-			{ id: user.user_id, email: user.email },
+			{ id: user.id, email: user.email },
 			process.env.JWT_SECRET,
 			{ expiresIn: '24h' }
 		)
 
-		res.clearCookie('authToken')
-		// Set cookie with token for development
-		if (process.env.NODE_ENV === 'development') {
-			res.cookie('authToken', token, {
-				httpOnly: true,
-				sameSite: 'strict',
-				secure: false,
-				maxAge: 24 * 60 * 60 * 1000, // 24 hours
-			})
-		} else if (process.env.NODE_ENV === 'production') {
-			res.cookie('authToken', token, {
-				httpOnly: true,
-				sameSite: 'strict',
-				secure: true,
-				maxAge: 24 * 60 * 60 * 1000, // 24 hours
-			})
-		}
+		// Clear existing cookie and set new token
+		res.clearCookie('authToken') // Ensure this works before setting a new token
+		res.cookie('authToken', token, {
+			httpOnly: true, // Accessible only by the server
+			secure: false, // Secure cookies require HTTPS, so set it to false for localhost
+			sameSite: 'Lax', // Lax is a good default, restricts cross-site requests but allows same-site navigation
+			maxAge: 24 * 60 * 60 * 1000, // 24 hours
+			path: '/', // Make the cookie accessible across your site
+		})
+
+		// Production cookie settings
+		// Production (https, stricter settings)
+		// res.cookie('authToken', token, {
+		// 	httpOnly: true, // Server-only access for security
+		// 	secure: true, // Ensure the cookie is sent only over HTTPS
+		// 	sameSite: 'None', // For cross-site requests, use None; else 'Lax' or 'Strict' can be safer.
+		// 	maxAge: 24 * 60 * 60 * 1000, // 24 hours
+		// 	path: '/', // Make the cookie accessible across your site
+		// })
+
 		res.json({ user })
 	} catch (error) {
 		if (error instanceof yup.ValidationError) {
@@ -113,6 +120,16 @@ export const loginUser = async (req, res) => {
 		} else {
 			return res.status(500).json({ error: error.message })
 		}
+	}
+}
+
+export const validateToken = async (req, res) => {
+	try {
+		const { id, email } = req.user
+
+		res.json({ user: { id, email } })
+	} catch (error) {
+		res.status(500).json({ message: 'Server error' })
 	}
 }
 

@@ -3,7 +3,7 @@ import sequelize from '../config/database.js';
 
 const Profile = sequelize.define('Profile', {
   // Model attributes are defined here
-  profile_id: {
+  id: {
     type: DataTypes.BIGINT,
     autoIncrement: true,
     primaryKey: true,
@@ -12,7 +12,7 @@ const Profile = sequelize.define('Profile', {
     type: DataTypes.BIGINT,
     references: {
       model: 'users',
-      key: 'user_id',
+      key: 'id',
     },
     allowNull: false,
   },

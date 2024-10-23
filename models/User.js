@@ -3,7 +3,7 @@ import sequelize from '../config/database.js';
 
 const User = sequelize.define('User', {
   // Model attributes are defined here
-  user_id: {
+  id: {
     type: DataTypes.BIGINT,
     autoIncrement: true,
     primaryKey: true,

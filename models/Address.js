@@ -4,7 +4,7 @@ import sequelize from '../config/database.js'
 const Address = sequelize.define(
 	'Address',
 	{
-		address_id: {
+		id: {
 			type: DataTypes.BIGINT,
 			autoIncrement: true,
 			primaryKey: true,
@@ -13,7 +13,7 @@ const Address = sequelize.define(
 			type: DataTypes.BIGINT,
 			references: {
 				model: 'users',
-				key: 'user_id',
+				key: 'id',
 			},
 			allowNull: false,
 		},

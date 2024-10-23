@@ -67,11 +67,11 @@ export const addItemToBasket = async (req, res) => {
     if (req.user) {
       // Authenticated user
       basket = await db.Basket.findOne({
-        where: { user_id: req.user.id, status: 'active' },
+        where: { id: req.user.id, status: 'active' },
       });
 
       if (!basket) {
-        basket = await db.Basket.create({ user_id: req.user.id, status: 'active' });
+        basket = await db.Basket.create({ id: req.user.id, status: 'active' });
       }
     } else {
       // Guest user
@@ -79,7 +79,7 @@ export const addItemToBasket = async (req, res) => {
     }
 
     const basketItem = await db.BasketItem.create({
-      basket_id: basket.basket_id,
+      basket_id: basket.id,
       product,
       quantity,
     });

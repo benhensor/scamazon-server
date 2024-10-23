@@ -47,7 +47,7 @@ export const setDefaultAddress = async (req, res) => {
     // Set the specified address as default
     const [numberOfAffectedRows, updatedAddress] = await db.Address.update(
       { is_default: true },
-      { where: { address_id: addressId, user_id: req.user.id } } // Use the correct addressId
+      { where: { id: addressId, user_id: req.user.id } } // Use the correct addressId
     );
 
     if (numberOfAffectedRows === 0) { // Check if any rows were updated
@@ -56,7 +56,7 @@ export const setDefaultAddress = async (req, res) => {
 
     // Fetch the updated address to return it
     const address = await db.Address.findOne({
-      where: { address_id: addressId }
+      where: { id: addressId }
     });
 
     res.json(address); // Return the updated address
@@ -101,12 +101,13 @@ export const deleteAddress = async (req, res) => {
 
 
 export const getUserAddresses = async (req, res) => {
+  console.log(req.user);
   try {
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized, token missing or invalid' });
     }
 
-    const addresses = await db.Address.findAll({ where: { user_id: req.user.id }}); // Use 'id' directly
+    const addresses = await db.Address.findAll({ where: { user_id: req.user.id }}); 
     res.json(addresses);
   } catch (error) {
     res.status(400).json({ message: error.message });

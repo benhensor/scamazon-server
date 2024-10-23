@@ -1,7 +1,10 @@
 import express from 'express';
 const router = express.Router();
 import verifyToken from '../middleware/verifyToken.js';
-import { registerUser, loginUser, logoutUser, getUser, updateUser, deleteUser } from '../controllers/userController.js';
+import { registerUser, loginUser, validateToken, logoutUser, getUser, updateUser, deleteUser } from '../controllers/userController.js';
+import authMiddleware from '../middleware/authMiddleware.js';
+
+router.get('/validate-token', authMiddleware, validateToken);
 
 // User registration
 router.post('/register', registerUser); // POST /api/users/register
