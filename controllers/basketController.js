@@ -61,7 +61,7 @@ export const createUserBasket = async (req, res) => {
 export const addItemToBasket = async (req, res) => {
   console.log('Adding item to basket:', req.body);
   try {
-    const { product, quantity } = req.body;
+    const { productId, quantity } = req.body;
     let basket;
 
     if (req.user) {
@@ -80,7 +80,7 @@ export const addItemToBasket = async (req, res) => {
 
     const basketItem = await db.BasketItem.create({
       basket_id: basket.id,
-      product,
+      product_id: productId,
       quantity,
     });
 
@@ -162,7 +162,7 @@ export const clearBasket = async (req, res) => {
     }
 
     await db.BasketItem.destroy({
-      where: { basket_id: basket.basket_id },
+      where: { basket_id: basket.id },
     });
 
     res.json({ message: 'Basket cleared successfully' });

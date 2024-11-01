@@ -15,8 +15,8 @@ const BasketItem = sequelize.define('BasketItem', {
     },
     allowNull: false,
   },
-  product: {
-    type: DataTypes.JSONB,
+  product_id: {
+    type: DataTypes.BIGINT,
     allowNull: false,
   },
   quantity: {

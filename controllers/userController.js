@@ -96,11 +96,11 @@ export const loginUser = async (req, res) => {
 		// Clear existing cookie and set new token
 		res.clearCookie('authToken') // Ensure this works before setting a new token
 		res.cookie('authToken', token, {
-			httpOnly: true, // Accessible only by the server
-			secure: false, // Secure cookies require HTTPS, so set it to false for localhost
-			sameSite: 'Lax', // Lax is a good default, restricts cross-site requests but allows same-site navigation
+			httpOnly: true, // Server-only access
+			secure: process.env.NODE_ENV === 'production', // Secure in production
+			sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // Lax for local dev
 			maxAge: 24 * 60 * 60 * 1000, // 24 hours
-			path: '/', // Make the cookie accessible across your site
+			path: '/', // Make it accessible site-wide
 		})
 
 		// Production cookie settings
@@ -123,25 +123,29 @@ export const loginUser = async (req, res) => {
 	}
 }
 
-export const validateToken = async (req, res) => {
-	try {
-		const { id, email } = req.user
-
-		res.json({ user: { id, email } })
-	} catch (error) {
-		res.status(500).json({ message: 'Server error' })
-	}
-}
-
 export const logoutUser = async (req, res) => {
 	res.clearCookie('authToken')
 	res.status(200).json({ message: 'Logged out successfully' })
 }
 
-export const getUser = async (req, res) => {
+export const getCurrentUser = async (req, res) => {
+	const token = req.cookies.authToken;
+	if (!token) return res.status(401).json({ error: 'Unauthorized' });
 	try {
-	} catch (error) {}
+		 const decoded = jwt.verify(token, process.env.JWT_SECRET);
+		 const user = await User.findByPk(decoded.id);
+		 if (!user) return res.status(404).json({ error: 'User not found' });
+		 res.json({ user });
+	} catch (error) {
+		 if (error.name === 'TokenExpiredError') {
+				return res.status(401).json({ error: 'Token expired' });
+		 }
+		 return res.status(500).json({ error: error.message });
+	}
 }
+
+export const getUserProfile = async (req, res) => {}
+
 
 export const updateUser = async (req, res) => {
 	try {
