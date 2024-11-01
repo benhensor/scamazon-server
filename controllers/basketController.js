@@ -38,7 +38,7 @@ export const createUserBasket = async (req, res) => {
     // Add guest items to the user's basket
     for (const item of guestBasketItems) {
       await db.BasketItem.create({
-        basket_id: basket.basket_id,
+        basket_id: basket.id,
         product: item.product,
         quantity: item.quantity,
       });
@@ -46,7 +46,7 @@ export const createUserBasket = async (req, res) => {
 
     // Fetch the updated basket with items
     const updatedBasket = await db.Basket.findOne({
-      where: { basket_id: basket.basket_id },
+      where: { id: basket.id },
       include: [{ model: db.BasketItem }],
     });
 
@@ -71,12 +71,25 @@ export const addItemToBasket = async (req, res) => {
       });
 
       if (!basket) {
-        basket = await db.Basket.create({ id: req.user.id, status: 'active' });
+        basket = await db.Basket.create({ user_id: req.user.id, status: 'active' });
       }
     } else {
       // Guest user
       basket = await db.Basket.create({ status: 'active' });
     }
+
+    // Check if the item is already in the basket
+    const existingItem = await db.BasketItem.findOne({
+      where: { basket_id: basket.id, product_id: productId },
+    });
+
+    if (existingItem) {
+      // If the item already exists, update the quantity
+      await existingItem.update({ quantity: existingItem.quantity + quantity });
+      return res.json(existingItem);
+    }
+
+    // Add the item to the basket
 
     const basketItem = await db.BasketItem.create({
       basket_id: basket.id,

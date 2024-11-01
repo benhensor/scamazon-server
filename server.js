@@ -45,7 +45,7 @@ app.use(helmet({
 
 // Sync database
 if (process.env.NODE_ENV === 'development') {
-  sequelize.sync()
+  sequelize.sync({ alter: true }) // Alter sync for development
     .then(() => console.log('Database synced (development)'))
     .catch(err => console.error('Failed to sync database:', err));
 } else {
