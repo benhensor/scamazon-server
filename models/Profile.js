@@ -7,6 +7,7 @@ const Profile = sequelize.define('Profile', {
     type: DataTypes.BIGINT,
     autoIncrement: true,
     primaryKey: true,
+    field: 'id',
   },
   user_id: {
     type: DataTypes.BIGINT,

@@ -8,6 +8,7 @@ const Basket = sequelize.define(
 			type: DataTypes.BIGINT,
 			autoIncrement: true,
 			primaryKey: true,
+			field: 'id',
 		},
 		user_id: {
 			type: DataTypes.BIGINT,

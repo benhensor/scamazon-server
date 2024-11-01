@@ -6,6 +6,7 @@ const OrderItem = sequelize.define('OrderItem', {
     type: DataTypes.BIGINT,
     autoIncrement: true,
     primaryKey: true,
+    field: 'id',
   },
   order_id: {
     type: DataTypes.BIGINT,

@@ -6,6 +6,7 @@ const Payment = sequelize.define('Payment', {
     type: DataTypes.BIGINT,
     autoIncrement: true,
     primaryKey: true,
+    field: 'id',
   },
   order_id: {
     type: DataTypes.BIGINT,

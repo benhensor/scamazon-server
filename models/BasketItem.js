@@ -6,6 +6,7 @@ const BasketItem = sequelize.define('BasketItem', {
     type: DataTypes.BIGINT,
     autoIncrement: true,
     primaryKey: true,
+    field: 'id',
   },
   basket_id: {
     type: DataTypes.BIGINT,
