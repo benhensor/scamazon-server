@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const verifyTokenOptional = (req, res, next) => {
-  const token = req.cookies.token || req.headers['authorization'];
+  const token = req.cookies.authToken || req.headers['authorization'];
   if (!token) {
     req.user = null; // Guest user
     return next();

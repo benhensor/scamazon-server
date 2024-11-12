@@ -104,6 +104,106 @@ export const addItemToBasket = async (req, res) => {
   }
 };
 
+// Toggle item selected status in Basket (authenticated)
+export const toggleItemSelected = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    console.log('basketItem', id)
+    const basketItem = await db.BasketItem.findByPk(id);
+    if (!basketItem) {
+      return res.status(404).json({ message: 'Basket item not found' });
+    }
+
+    // Check if the user is authenticated
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    // Ensure the basket belongs to the user
+    const basket = await db.Basket.findByPk(basketItem.basket_id);
+    if (!basket || basket.user_id !== req.user.id) {
+      return res.status(403).json({ message: 'Not authorized to update this basket' });
+    }
+
+    await basketItem.update({ is_selected: !basketItem.is_selected });
+
+    res.json(basketItem);
+  } catch (error) {
+    console.error('Error in toggleItemSelected:', error);
+    res.status(500).json({ message: 'Error toggling item selected status' });
+  }
+};
+
+// Select all items in Basket (authenticated or guest)
+export const selectAllItems = async (req, res) => {
+  try {
+
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const basket = await db.Basket.findOne({
+      where: { user_id: req.user.id, status: 'active' },
+      include: [{ model: db.BasketItem }],
+    });
+
+    if (!basket) {
+      return res.status(404).json({ message: 'No active basket found' });
+    }
+
+    await db.BasketItem.update(
+      { is_selected: true },
+      { where: { basket_id: basket.id } }
+    );
+
+    // Fetch the updated basket with items
+    const updatedBasket = await db.Basket.findOne({
+      where: { id: basket.id },
+      include: [{ model: db.BasketItem }],
+    });
+
+    res.json(updatedBasket);
+  } catch (error) {
+    console.error('Error in selectAllItems:', error);
+    res.status(500).json({ message: 'Error selecting all items' });
+  }
+};
+
+// Deselect all items in Basket (authenticated or guest)
+export const deselectAllItems = async (req, res) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const basket = await db.Basket.findOne({
+      where: { user_id: req.user.id, status: 'active' },
+      include: [{ model: db.BasketItem }],
+    });
+
+    if (!basket) {
+      return res.status(404).json({ message: 'No active basket found' });
+    }
+
+    await db.BasketItem.update(
+      { is_selected: false },
+      { where: { basket_id: basket.id } }
+    );
+
+    // Fetch the updated basket with items
+    const updatedBasket = await db.Basket.findOne({
+      where: { id: basket.id },
+      include: [{ model: db.BasketItem }],
+    });
+
+    res.json(updatedBasket);
+  } catch (error) {
+    console.error('Error in deselectAllItems:', error);
+    res.status(500).json({ message: 'Error deselecting all items' });
+  }
+};
+
 // Update item quantity in Basket (authenticated or guest)
 export const updateItemQuantity = async (req, res) => {
   try {
