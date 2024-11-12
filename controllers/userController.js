@@ -88,7 +88,7 @@ export const loginUser = async (req, res) => {
 		console.log('User logged in:', user)
 
 		const token = jwt.sign(
-			{ id: user.id, email: user.email },
+			{ user_id: user.user_id, email: user.email },
 			process.env.JWT_SECRET,
 			{ expiresIn: '24h' }
 		)
@@ -105,13 +105,13 @@ export const loginUser = async (req, res) => {
 
 		// Production cookie settings
 		// Production (https, stricter settings)
-		res.cookie('authToken', token, {
-			httpOnly: true, // Server-only access for security
-			secure: true, // Ensure the cookie is sent only over HTTPS
-			sameSite: 'None', // For cross-site requests, use None; else 'Lax' or 'Strict' can be safer.
-			maxAge: 24 * 60 * 60 * 1000, // 24 hours
-			path: '/', // Make the cookie accessible across your site
-		})
+		// res.cookie('authToken', token, {
+		// 	httpOnly: true, // Server-only access for security
+		// 	secure: true, // Ensure the cookie is sent only over HTTPS
+		// 	sameSite: 'None', // For cross-site requests, use None; else 'Lax' or 'Strict' can be safer.
+		// 	maxAge: 24 * 60 * 60 * 1000, // 24 hours
+		// 	path: '/', // Make the cookie accessible across your site
+		// })
 
 		res.json({ user })
 	} catch (error) {
@@ -133,7 +133,7 @@ export const getCurrentUser = async (req, res) => {
 	if (!token) return res.status(401).json({ error: 'Unauthorized' });
 	try {
 		 const decoded = jwt.verify(token, process.env.JWT_SECRET);
-		 const user = await User.findByPk(decoded.id);
+		 const user = await User.findByPk(decoded.user_id);
 		 if (!user) return res.status(404).json({ error: 'User not found' });
 		 res.json({ user });
 	} catch (error) {

@@ -2,17 +2,16 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
 const Payment = sequelize.define('Payment', {
-  id: {
+  payment_id: {
     type: DataTypes.BIGINT,
     autoIncrement: true,
     primaryKey: true,
-    field: 'id',
   },
   order_id: {
     type: DataTypes.BIGINT,
     references: {
       model: 'orders',
-      key: 'id'
+      key: 'order_id'
     },
     allowNull: false,
   },

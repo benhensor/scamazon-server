@@ -4,17 +4,16 @@ import sequelize from '../config/database.js'
 const Basket = sequelize.define(
 	'Basket',
 	{
-		id: {
+		basket_id: {
 			type: DataTypes.BIGINT,
 			autoIncrement: true,
 			primaryKey: true,
-			field: 'id',
 		},
 		user_id: {
 			type: DataTypes.BIGINT,
 			references: {
 				model: 'users',
-				key: 'id',
+				key: 'user_id',
 			},
 			allowNull: true,
 		},

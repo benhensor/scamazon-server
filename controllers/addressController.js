@@ -5,7 +5,7 @@ export const addAddress = async (req, res) => {
   console.log('Adding address:', req.user);
   console.log('Adding address:', req.body);
   try {
-    if (!req.user || !req.user.id) { // Check for 'id'
+    if (!req.user || !req.user.user_id) { // Check for 'id'
       return res.status(401).json({ message: "User not authenticated" });
     }
 
@@ -17,7 +17,7 @@ export const addAddress = async (req, res) => {
 
     const newAddress = await db.Address.create({
       ...req.body,
-      user_id: req.user.id // Use 'id' directly
+      user_id: req.user.user_id 
     });
 
     res.status(201).json(newAddress);
@@ -37,17 +37,17 @@ export const setDefaultAddress = async (req, res) => {
   console.log('Request received to set default address');
   const addressId = req.params.id;
   console.log('Parameters:', req.params);
-  console.log('User ID:', req.user.id); // Ensure this is set correctly
+  console.log('User ID:', req.user.user_id); // Ensure this is set correctly
   try {
     await db.Address.update(
       { is_default: false },
-      { where: { user_id: req.user.id } } 
+      { where: { user_id: req.user.user_id } } 
     );
 
     // Set the specified address as default
     const [numberOfAffectedRows, updatedAddress] = await db.Address.update(
       { is_default: true },
-      { where: { id: addressId, user_id: req.user.id } } // Use the correct addressId
+      { where: { address_id: addressId, user_id: req.user.user_id } } // Use the correct addressId
     );
 
     if (numberOfAffectedRows === 0) { // Check if any rows were updated
@@ -56,7 +56,7 @@ export const setDefaultAddress = async (req, res) => {
 
     // Fetch the updated address to return it
     const address = await db.Address.findOne({
-      where: { id: addressId }
+      where: { address_id: addressId }
     });
 
     res.json(address); // Return the updated address
@@ -69,7 +69,7 @@ export const setDefaultAddress = async (req, res) => {
 export const updateAddress = async (req, res) => {
   try {
     const updatedAddress = await db.Address.findOneAndUpdate(
-      { _id: req.params.id, user_id: req.user.id }, // Accessing user ID correctly
+      { address_id: req.params.address_id, user_id: req.user.user_id }, // Accessing user ID correctly
       req.body,
       { new: true }
     );
@@ -87,8 +87,8 @@ export const updateAddress = async (req, res) => {
 export const deleteAddress = async (req, res) => {
   try {
     const deletedAddress = await db.Address.findOneAndDelete({
-      _id: req.params.id,
-      user_id: req.user.id // Accessing user ID correctly
+      address_id: req.params.address_id,
+      user_id: req.user.user_id // Accessing user ID correctly
     });
     if (!deletedAddress) {
       return res.status(404).json({ message: 'Address not found' });
@@ -107,7 +107,7 @@ export const getUserAddresses = async (req, res) => {
       return res.status(401).json({ message: 'Unauthorized, token missing or invalid' });
     }
 
-    const addresses = await db.Address.findAll({ where: { user_id: req.user.id }}); 
+    const addresses = await db.Address.findAll({ where: { user_id: req.user.user_id }}); 
     res.json(addresses);
   } catch (error) {
     res.status(400).json({ message: error.message });
