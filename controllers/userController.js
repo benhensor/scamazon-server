@@ -105,13 +105,13 @@ export const loginUser = async (req, res) => {
 
 		// Production cookie settings
 		// Production (https, stricter settings)
-		// res.cookie('authToken', token, {
-		// 	httpOnly: true, // Server-only access for security
-		// 	secure: true, // Ensure the cookie is sent only over HTTPS
-		// 	sameSite: 'None', // For cross-site requests, use None; else 'Lax' or 'Strict' can be safer.
-		// 	maxAge: 24 * 60 * 60 * 1000, // 24 hours
-		// 	path: '/', // Make the cookie accessible across your site
-		// })
+		res.cookie('authToken', token, {
+			httpOnly: true, // Server-only access for security
+			secure: true, // Ensure the cookie is sent only over HTTPS
+			sameSite: 'None', // For cross-site requests, use None; else 'Lax' or 'Strict' can be safer.
+			maxAge: 24 * 60 * 60 * 1000, // 24 hours
+			path: '/', // Make the cookie accessible across your site
+		})
 
 		res.json({ user })
 	} catch (error) {
