@@ -26,7 +26,7 @@ const BasketItem = sequelize.define('BasketItem', {
   },
   is_selected: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    defaultValue: true,
   }
 }, {
   tableName: 'basket_items',
