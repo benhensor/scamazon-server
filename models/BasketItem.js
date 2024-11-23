@@ -3,8 +3,7 @@ import sequelize from "../config/database.js";
 
 const BasketItem = sequelize.define('BasketItem', {
   basket_item_id: {
-    type: DataTypes.BIGINT,
-    autoIncrement: true,
+    type: DataTypes.STRING,
     primaryKey: true,
   },
   basket_id: {
@@ -15,8 +14,8 @@ const BasketItem = sequelize.define('BasketItem', {
     },
     allowNull: false,
   },
-  product_id: {
-    type: DataTypes.BIGINT,
+  product_data: {
+    type: DataTypes.JSONB,
     allowNull: false,
   },
   quantity: {

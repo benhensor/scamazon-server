@@ -1,4 +1,5 @@
 import db from '../models/index.js';
+import { Op } from 'sequelize';
 
 // Get user Basket (authenticated)
 export const getUserBasket = async (req, res) => {
@@ -32,7 +33,7 @@ export const createUserBasket = async (req, res) => {
     });
 
     if (!basket) {
-      basket = await db.Basket.create({ user_id: userId, status: 'active' });
+      basket = await db.Basket.create({ basket_id: userId, user_id: userId, status: 'active' });
     }
 
     // Add guest items to the user's basket
@@ -47,7 +48,7 @@ export const createUserBasket = async (req, res) => {
     // Fetch the updated basket with items
     const updatedBasket = await db.Basket.findOne({
       where: { basket_id: basket.basket_id },
-      include: [{ model: db.BasketItem }],
+      include: [{ model: db.BasketItem }], 
     });
 
     res.status(201).json(updatedBasket);
@@ -61,7 +62,9 @@ export const createUserBasket = async (req, res) => {
 export const addItemToBasket = async (req, res) => {
   console.log('Adding item to basket:', req.body);
   try {
-    const { productId, quantity } = req.body;
+    const { basket_item_id, basket_id, product_data, quantity, is_selected } = req.body.basketItem;
+    const { productId } = req.body.productId;
+    console.log('productId', productId)
     let basket;
 
     if (req.user) {
@@ -69,6 +72,11 @@ export const addItemToBasket = async (req, res) => {
       basket = await db.Basket.findOne({
         where: { user_id: req.user.user_id, status: 'active' },
       });
+
+      // Check if the basket matches the item's basket_id
+      if (basket_id && basket.basket_id !== basket_id) {
+        return res.status(403).json({ message: 'Not authorized to update this basket' });
+      }
 
       if (!basket) {
         basket = await db.Basket.create({ user_id: req.user.user_id, status: 'active' });
@@ -80,22 +88,31 @@ export const addItemToBasket = async (req, res) => {
 
     // Check if the item is already in the basket
     const existingItem = await db.BasketItem.findOne({
-      where: { basket_id: basket.basket_id, product_id: productId },
+      where: {
+        basket_id: basket.basket_id,
+        // Check if product_data contains productId (assuming product_data is a JSON object with 'id' as the key)
+        product_data: {
+          [Op.contains]: { id: productId }  // This checks if product_data contains the id field with the given productId
+        },
+      },
     });
 
     if (existingItem) {
       // If the item already exists, update the quantity
+      console.log('existingItem', existingItem)
       await existingItem.update({ quantity: existingItem.quantity + quantity });
       return res.json(existingItem);
+    } else {
+      // Add the item to the basket
+      const basketItem = await db.BasketItem.create({
+        basket_item_id: basket_item_id,
+        basket_id: basket.basket_id,
+        product_data: product_data,
+        quantity: quantity,
+        is_selected: is_selected,
+      });
     }
 
-    // Add the item to the basket
-
-    const basketItem = await db.BasketItem.create({
-      basket_id: basket.basket_id,
-      product_id: productId,
-      quantity,
-    });
 
     res.status(201).json(basketItem);
   } catch (error) {
@@ -225,7 +242,7 @@ export const updateItemQuantity = async (req, res) => {
     }
 
     await basketItem.update({ quantity });
-
+    console.log('updated basketItem', basketItem)
     res.json(basketItem);
   } catch (error) {
     console.error('Error in updateItemQuantity:', error);
@@ -236,9 +253,9 @@ export const updateItemQuantity = async (req, res) => {
 // Remove item from Basket (authenticated or guest)
 export const removeItemFromBasket = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { basket_item_id } = req.params;
 
-    const basketItem = await db.BasketItem.findByPk(id);
+    const basketItem = await db.BasketItem.findByPk(basket_item_id);
 
     if (!basketItem) {
       return res.status(404).json({ message: 'Basket item not found' });
