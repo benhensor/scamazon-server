@@ -6,7 +6,6 @@ const Basket = sequelize.define(
 	{
 		basket_id: {
 			type: DataTypes.BIGINT,
-			autoIncrement: true,
 			primaryKey: true,
 		},
 		user_id: {
@@ -17,13 +16,28 @@ const Basket = sequelize.define(
 			},
 			allowNull: true,
 		},
+		items: {
+			type: DataTypes.ARRAY(DataTypes.JSONB),
+			defaultValue: [],
+			allowNull: false,
+		},
+		count: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		total: {
+			type: DataTypes.DECIMAL(10, 2),
+			defaultValue: 0.0,
+			allowNull: false,
+		},
 		status: {
 			type: DataTypes.ENUM(
 				'active',
 				'saved_for_later',
 				'converted_to_order'
 			),
-			defaultValue: 'active',
+			defaultValue: 'active', 
 			allowNull: false,
 		},
 		last_modified: {
@@ -36,6 +50,6 @@ const Basket = sequelize.define(
 		tableName: 'baskets',
 		timestamps: true,
 	}
-)
+) 
 
 export default Basket

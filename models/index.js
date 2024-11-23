@@ -31,7 +31,7 @@ Payment.belongsTo(Order, { foreignKey: 'order_id' })
 
 // Carts and Cart Items
 Basket.hasMany(BasketItem, { foreignKey: 'basket_id', onDelete: 'CASCADE' })
-BasketItem.belongsTo(Basket, { foreignKey: 'basket_id' })
+BasketItem.belongsTo(Basket, { foreignKey: 'basket_id' }) 
 
 const db = {
 	sequelize,
