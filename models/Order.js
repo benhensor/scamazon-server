@@ -3,8 +3,7 @@ import sequelize from "../config/database.js";
 
 const Order = sequelize.define('Order', {
   order_id: {
-    type: DataTypes.BIGINT,
-    autoIncrement: true,
+    type: DataTypes.STRING,
     primaryKey: true,
   },
   user_id: {
@@ -15,23 +14,18 @@ const Order = sequelize.define('Order', {
     },
     allowNull: false
   },
-  status: {
-    type: DataTypes.STRING(50),
+  order_placed: {
+    type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: 'pending', // Default order status
   },
-  total_price: {
+  shipping: {
+    type: DataTypes.JSONB,
+    allowNull: false,
+  },
+  total: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
-  },
-  shipping_address: {
-    type: DataTypes.TEXT, // You can store the address as a JSON or TEXT field
-    allowNull: false,
-  },
-  billing_address: {
-    type: DataTypes.TEXT, // You can store the address as a JSON or TEXT field
-    allowNull: false,
-  },
+  }  
 }, {
   tableName: 'orders',
   timestamps: true,

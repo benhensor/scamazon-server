@@ -12,8 +12,7 @@ import sequelize from './config/database.js';
 import userRoutes from './routes/userRoutes.js';
 import addressRoutes from './routes/addressRoutes.js';
 import productsRoutes from './routes/productsRoutes.js';
-// import orderRoutes from './routes/orderRoutes.js';
-// import orderItemRoutes from './routes/orderItemRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 import basketRoutes from './routes/basketRoutes.js';
 // import paymentRoutes from './routes/paymentRoutes.js';
 // import reviewRoutes from './routes/reviewRoutes.js';
@@ -33,7 +32,7 @@ const corsOptions = {
 };
 
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); 
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -78,8 +77,7 @@ app.get('/api/test', (req, res) => {
 app.use('/api/user', userRoutes);
 app.use('/api/addresses', addressRoutes);
 app.use('/api/products', productsRoutes);
-// app.use('/api/orders', orderRoutes);
-// app.use('/api/order-items', orderItemRoutes);
+app.use('/api/orders', orderRoutes);
 app.use('/api/basket', basketRoutes);
 // app.use('/api/payments', paymentRoutes);
 // app.use('/api/reviews', reviewRoutes);
