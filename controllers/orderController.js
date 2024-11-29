@@ -77,6 +77,45 @@ export const fetchOrders = async (req, res) => {
 
 export const getOrderById = async (req, res) => {}
 
+export const updateOrderStatus = async (req, res) => {
+  const transaction = await db.sequelize.transaction();
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    const user_id = req.user.user_id;
+
+    if (!user_id) {
+      return res.status(400).json({ message: 'Invalid user' });
+    }
+
+    // Check if order exists
+    const order = await db.Order.findOne({ 
+      where: { order_id: id },
+      transaction 
+    });
+
+    if (!order) {
+      await transaction.rollback();
+      return res.status(400).json({ message: 'Order does not exist' });
+    }
+
+    // Update order status with transaction
+    await db.Order.update({ status }, {
+      where: { order_id: id },
+      transaction,
+    });
+
+    // Commit transaction
+    await transaction.commit();
+
+    res.status(200).json({ message: 'Order status updated successfully' });
+  } catch (error) {
+    await transaction.rollback();
+    res.status(500).json({ message: error.message });
+  }
+}
+
 export const deleteOrder = async (req, res) => {
   const transaction = await db.sequelize.transaction();
 
