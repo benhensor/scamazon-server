@@ -14,8 +14,7 @@ import addressRoutes from './routes/addressRoutes.js';
 import productsRoutes from './routes/productsRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import basketRoutes from './routes/basketRoutes.js';
-// import paymentRoutes from './routes/paymentRoutes.js';
-// import reviewRoutes from './routes/reviewRoutes.js';
+import paymentMethodsRoutes from './routes/paymentMethodsRoutes.js';
 
 
 dotenv.config();
@@ -79,8 +78,7 @@ app.use('/api/addresses', addressRoutes);
 app.use('/api/products', productsRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/basket', basketRoutes);
-// app.use('/api/payments', paymentRoutes);
-// app.use('/api/reviews', reviewRoutes);
+app.use('/api/payment-methods', paymentMethodsRoutes);
 
 
 // Start server

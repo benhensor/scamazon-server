@@ -5,6 +5,7 @@ import Order from './Order.js'
 import OrderItem from './OrderItem.js'
 import Basket from './Basket.js'
 import BasketItem from './BasketItem.js'
+import PaymentMethod from './PaymentMethod.js'
 
 // Define Relationships
 
@@ -28,6 +29,7 @@ OrderItem.belongsTo(Order, { foreignKey: 'order_id' })
 Basket.hasMany(BasketItem, { foreignKey: 'basket_id', onDelete: 'CASCADE' })
 BasketItem.belongsTo(Basket, { foreignKey: 'basket_id' }) 
 
+
 const db = {
 	sequelize,
 	User,
@@ -36,6 +38,7 @@ const db = {
 	OrderItem,
 	Basket,
 	BasketItem,
+	PaymentMethod,
 }
 
 export default db
