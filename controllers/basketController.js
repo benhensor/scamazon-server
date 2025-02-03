@@ -108,35 +108,7 @@ export const updateBasket = async (req, res) => {
   }
 };
 
-export const toggleItemSelected = async (req, res) => {
-  try {
-    const { basket_item_id } = req.params
-
-    const basketItem = await db.BasketItem.findOne({
-      include: [{
-        model: db.Basket,
-        where: { 
-          user_id: req.user.user_id,
-          status: 'active'
-        }
-      }],
-      where: { basket_item_id }
-    })
-
-    if (!basketItem) {
-      return res.status(404).json({ error: 'Basket item not found' })
-    }
-
-    await basketItem.update({ 
-      is_selected: !basketItem.is_selected,
-      last_modified: new Date()
-    })
-
-    res.json({ success: true })
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to toggle item selection' })
-  }
-}
+        
 
 export const updateItemQuantity = async (req, res) => {
   try {

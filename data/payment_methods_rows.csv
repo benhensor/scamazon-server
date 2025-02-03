@@ -1,0 +1,21 @@
+payment_method_id,bank,type,account,number,start_date,end_date,cvv,status
+1,Barclays,VISA,Debit,4532012345673773,01/23,01/28,397,valid
+2,HSBC,Mastercard,Credit,5412345678901234,03/24,03/29,456,valid
+3,NatWest,VISA,Credit,4123456789012345,06/24,06/29,789,valid
+4,Lloyds Bank,Mastercard,Debit,5234567890123456,12/19,12/28,234,default
+5,Santander,VISA,Credit,4345678901234567,09/20,09/29,567,valid
+6,Halifax,Mastercard,Debit,5345678901234567,03/19,03/22,890,expired
+7,RBS,VISA,Credit,4456789012345678,08/21,08/26,345,expired
+8,TSB,Mastercard,Debit,5456789012345678,11/20,11/23,678,expired
+9,Nationwide,VISA,Credit,4567890123456789,04/22,04/27,901,expired
+10,Metro Bank,Mastercard,Debit,5567890123456789,07/19,07/22,234,expired
+11,Barclays,VISA,Credit,4678901234567890,02/21,02/24,567,expired
+12,HSBC,Mastercard,Debit,5678901234567890,05/20,05/23,890,expired
+13,NatWest,VISA,Credit,4789012345678901,10/21,10/26,123,expired
+14,Lloyds,Mastercard,Debit,5789012345678901,01/19,01/22,456,expired
+15,Santander,American Express,Credit,3789012345678901,12/21,12/26,789,expired
+16,Halifax,VISA,Debit,4890123456789012,03/20,03/23,012,expired
+17,RBS,Mastercard,Credit,5890123456789012,06/19,06/22,345,expired
+18,TSB,VISA,Debit,4901234567890123,09/22,09/27,678,valid
+19,Nationwide,Mastercard,Credit,5901234567890123,11/21,11/26,901,valid
+20,Metro Bank,American Express,Credit,3901234567890123,08/22,08/27,234,expired

@@ -6,7 +6,7 @@ export const addOrder = async (req, res) => {
 
   try {
     const user_id = req.user.user_id;
-    const { order_id, order_placed, shipping, order_items, total } = req.body;
+    const { order_placed, shipping, order_items, total } = req.body;
     console.log(req.body);
 
     if (!user_id) {
@@ -38,7 +38,7 @@ export const addOrder = async (req, res) => {
       db.OrderItem.create({
         order_item_id: UUIDV4(),
         order_id: order_id,
-        product_data: item.product_data,
+        product_id: item.product_data.id,
         quantity: item.quantity,
         is_selected: item.is_selected,
       }, { transaction })

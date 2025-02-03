@@ -1,0 +1,4 @@
+user_id,first_name,last_name,email,password,createdAt,updatedAt
+2,Testy,McTestFace,test@testing.com,$2a$10$jhbClG8MNtoPL5WRNCWJC.8/bP2GQWn2pg1KFz.vhau8o08z/VvjC,2024-11-12 16:26:22.63+00,2024-11-12 16:26:22.63+00
+3,Testy,Twoshoes,testing2@test.com,$2a$10$.mhiDaOKRsVY4ZDGm1jL6eioShq3ox3s5KduA97zyWpidt6Xh8gLa,2024-11-12 23:42:05.156+00,2024-11-12 23:42:05.156+00
+4,Lemon,Zesty,testing3@test.com,$2a$10$GcUGVivimiTOoKa.n6GVSe3h/Ka9E7OvJ60fdl3GlNfVmEDOhb/Em,2024-11-13 17:05:56.669+00,2024-11-13 17:05:56.669+00

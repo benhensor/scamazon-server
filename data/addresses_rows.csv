@@ -1,0 +1,4 @@
+user_id,address_line1,address_line2,city,county,postcode,createdAt,updatedAt,full_name,phone_number,country,is_default,is_billing,delivery_instructions,address_type,address_id
+2,1 Testing Street,,Testington,Testfordshire,TE1 2ST,2024-11-12 16:26:38.39+00,2024-11-12 16:26:38.39+00,Testy McTestFace,0123456789,United Kingdom,true,false,,home,1
+3,10 Queensway,,Horsham,West Sussex,RH13 5AP,2024-11-13 14:52:47.243+00,2024-11-13 14:52:47.243+00,Testy Twoshoes,07771771771,United Kingdom,true,false,,home,2
+4,23 Endless Street,Sadly Broke,Bristol,Avon,BS13 7HW,2024-11-13 17:22:06.117+00,2024-11-13 17:22:06.117+00,Lemon Zesty,0123456789,United Kingdom,true,false,,home,3
